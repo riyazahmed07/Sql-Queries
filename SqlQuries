@@ -32,4 +32,12 @@ alter table marks add AvgMarks decimal(3,2);
 
 //Altering Particular Column
 
-ALTER TABLE marks ALTER COLUMN AvgMarks decimal(3,2) Not null;
+alter table marks alter column AvgMarks numeric(4,2) Not Null;
+
+//Add Check Constraint for marks not greater than 100
+
+ALTER TABLE marks add CONSTRAINT CHK_Marks CHECK (Mark1<=100 AND Mark2<=100 and Mark3<=100);
+
+
+
+
