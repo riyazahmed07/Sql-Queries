@@ -1,0 +1,12 @@
+//Creating New Database
+
+create database StudentDb
+
+//Creating New Table
+
+CREATE TABLE [dbo].[StudentInfo](
+	[StudentId] [int] NOT NULL,
+	[Name] [varchar](50) NOT NULL,
+	[Age] [int] NOT NULL,
+	[Address] [varchar](250) NULL,
+ CONSTRAINT [PK_StudentInfo] PRIMARY KEY(StudentId));
