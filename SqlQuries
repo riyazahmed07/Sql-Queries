@@ -2,7 +2,7 @@
 
 create database StudentDb
 
-//Creating New Table
+//Creating Student Table
 
 CREATE TABLE [dbo].[StudentInfo](
 	[StudentId] [int] NOT NULL,
@@ -10,3 +10,26 @@ CREATE TABLE [dbo].[StudentInfo](
 	[Age] [int] NOT NULL,
 	[Address] [varchar](250) NULL,
  CONSTRAINT [PK_StudentInfo] PRIMARY KEY(StudentId));
+ 
+ //Creating StudentMarks Table
+ 
+ CREATE TABLE StudentMarks (
+    Mark1 int NOT NULL,
+    Mark2 int NOT NULL,
+	Mark3 int NOT NULL,
+    StudentID int,
+	Total Int Not Null,
+    FOREIGN KEY (StudentID) REFERENCES Studentinfo(StudentID)
+);
+
+//Delete Table
+
+drop table orders;
+
+//Add New Column To Existing Table
+
+alter table marks add AvgMarks decimal(3,2);
+
+//Altering Particular Column
+
+ALTER TABLE marks ALTER COLUMN AvgMarks decimal(3,2) Not null;
