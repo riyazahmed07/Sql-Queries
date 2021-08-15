@@ -5,7 +5,7 @@ create database StudentDb
 //Creating Student Table
 
 CREATE TABLE [dbo].[StudentInfo](
-	[StudentId] [int] NOT NULL,
+	[StudentId] [int] IDENTITY(1,1) NOT NULL,
 	[Name] [varchar](50) NOT NULL,
 	[Age] [int] NOT NULL,
 	[Address] [varchar](250) NULL,
@@ -28,11 +28,25 @@ drop table orders;
 
 //Add New Column To Existing Table
 
-alter table marks add AvgMarks decimal(3,2);
+alter table marks add AvgMarks decimal(4,2);
 
 //Altering Particular Column
 
 alter table marks alter column AvgMarks numeric(4,2) Not Null;
+
+//Creating Stored Procedure With parameter for particular student 
+
+CREATE PROCEDURE StudentMarks @StudentId int, @ExamType nvarchar(10)
+AS
+SELECT Studentinfo.Name,StuMarks.ExamType,sum(StuMarks.Mark) as Total,avg(StuMarks.Mark) as Percentage, Studentinfo.Name,sum(StuMarks.Mark)/2 as Total,avg(StuMarks.Mark) as Percentage ,dbo.studentgrade(sum(StuMarks.Mark)/2,sum(case when StuMarks.Mark>40 then 1 else 0 end)) as Grade FROM StuMarks INNER JOIN  Studentinfo  on  Studentinfo.StudentId = StuMarks.StudentId WHERE Studentinfo.StudentId=@StudentId AND StuMarks.examtype = @ExamType group by Studentinfo.Name ,StuMarks.ExamType
+GO
+
+//
+
+create procedure StudentToalMarks 
+as
+SELECT Studentinfo.Name,sum(StuMarks.Mark)/2 as Total,avg(StuMarks.Mark) as Percentage ,dbo.studentgrade(sum(StuMarks.Mark)/2,sum(case when StuMarks.Mark>40 then 1 else 0 end)) as Grade FROM StuMarks INNER JOIN  Studentinfo  on  Studentinfo.StudentId = StuMarks.StudentId group by Studentinfo.Name 
+go
 
 //Add Check Constraint for marks not greater than 100
 
@@ -47,3 +61,21 @@ insert into StuMarks values(5,'Maths',28,'quarterly');
 insert into StuMarks values(5,'Science',70,'quarterly');
 insert into StuMarks values(5,'Social Science',82,'quarterly');
 
+//Update Query
+
+update stumarks set mark=56 where studentid=5 and SubjectName='Tamil' and examtype='quarterly'
+
+//Function 
+
+CREATE function [dbo].[StudentGrade] (@Mark int,@Status int)
+Returns Char(1) as
+begin
+declare @return_Value char(1);
+if (@Status<10) set @return_Value='F';
+else if (@Mark>450 and @Status=10) set @return_Value='A';
+else if (@Mark>400) set @return_Value='B';
+else if (@Mark>350) set @return_Value='C';
+else if (@Mark>300) set @return_Value='D';
+else if (@Mark>200) set @return_Value='E';
+return @return_value
+end;
