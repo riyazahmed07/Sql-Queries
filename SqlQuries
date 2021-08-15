@@ -22,15 +22,15 @@ CREATE TABLE [dbo].[StudentInfo](
     FOREIGN KEY (StudentID) REFERENCES Studentinfo(StudentID)
 );
 
-//Delete Table
+//Delete Table example
 
-drop table orders;
+drop table StuMarks;
 
-//Add New Column To Existing Table
+//Add New Column To Existing Table example
 
 alter table marks add AvgMarks decimal(4,2);
 
-//Altering Particular Column
+//Altering Particular Column example
 
 alter table marks alter column AvgMarks numeric(4,2) Not Null;
 
@@ -41,7 +41,7 @@ AS
 SELECT Studentinfo.Name,StuMarks.ExamType,sum(StuMarks.Mark) as Total,avg(StuMarks.Mark) as Percentage, Studentinfo.Name,sum(StuMarks.Mark)/2 as Total,avg(StuMarks.Mark) as Percentage ,dbo.studentgrade(sum(StuMarks.Mark)/2,sum(case when StuMarks.Mark>40 then 1 else 0 end)) as Grade FROM StuMarks INNER JOIN  Studentinfo  on  Studentinfo.StudentId = StuMarks.StudentId WHERE Studentinfo.StudentId=@StudentId AND StuMarks.examtype = @ExamType group by Studentinfo.Name ,StuMarks.ExamType
 GO
 
-//
+//Creating Stored Procedure to get total marks avg and grade of all student 
 
 create procedure StudentToalMarks 
 as
@@ -65,7 +65,7 @@ insert into StuMarks values(5,'Social Science',82,'quarterly');
 
 update stumarks set mark=56 where studentid=5 and SubjectName='Tamil' and examtype='quarterly'
 
-//Function 
+//Function to return Grade
 
 CREATE function [dbo].[StudentGrade] (@Mark int,@Status int)
 Returns Char(1) as
@@ -79,3 +79,39 @@ else if (@Mark>300) set @return_Value='D';
 else if (@Mark>200) set @return_Value='E';
 return @return_value
 end;
+
+//execute storeprocedure
+
+exec studentmarks @StudentId= 1,@ExamType='quarterly'
+
+exec StudentToalMarks
+
+//Create new table
+
+CREATE TABLE [dbo].[StudentMarks1](
+	[StudentId] [int] NOT NULL,
+	[Tamil] [int] NOT NULL,
+	[English] [int] NOT NULL,
+	[Maths] [int] NOT NULL,
+	[science] [int] NOT NULL,
+	[Social] [int] NOT NULL,
+	[ExamType] [varchar](10) NOT NULL,
+	[Total] [int] NULL,
+	[Average] [int] NULL
+	FOREIGN KEY (StudentID) REFERENCES Studentinfo(StudentID)
+) ;
+
+
+//Trigger example ,trigger get fire when insert new records into table automatically calculate total and average
+
+create TRIGGER tr_StuMarks ON StudentMarks1
+    after INSERT
+	
+    AS
+    BEGIN
+	  update StudentMarks1
+      SET StudentMarks1.Total = StudentMarks1.tamil + StudentMarks1.english + StudentMarks1.maths + StudentMarks1.science + StudentMarks1.Social,StudentMarks1.Average=StudentMarks1.tamil + StudentMarks1.english + StudentMarks1.maths + StudentMarks1.science + StudentMarks1.Social/5;
+
+      
+    END
+   GO
