@@ -13,12 +13,12 @@ CREATE TABLE [dbo].[StudentInfo](
  
  //Creating StudentMarks Table
  
- CREATE TABLE StudentMarks (
-    Mark1 int NOT NULL,
-    Mark2 int NOT NULL,
-	Mark3 int NOT NULL,
-    StudentID int,
-	Total Int Not Null,
+ CREATE TABLE StuMarks (
+    StudentId int NOT NULL,
+    Subject varchar(20) NOT NULL,
+    Mark int NOT NULL,
+    ExamType varchar(20) NOT NULL,
+	
     FOREIGN KEY (StudentID) REFERENCES Studentinfo(StudentID)
 );
 
@@ -36,8 +36,14 @@ alter table marks alter column AvgMarks numeric(4,2) Not Null;
 
 //Add Check Constraint for marks not greater than 100
 
-ALTER TABLE marks add CONSTRAINT CHK_Marks CHECK (Mark1<=100 AND Mark2<=100 and Mark3<=100);
+ALTER TABLE marks add CONSTRAINT CHK_Marks CHECK (Mark<=100);
 
+//insert into table studentInfo and StuMarks
 
-
+insert into studentinfo values('Arun',12,'Chennai');
+insert into StuMarks values(5,'Tamil',75,'quarterly');
+insert into StuMarks values(5,'English',95,'quarterly');
+insert into StuMarks values(5,'Maths',28,'quarterly');
+insert into StuMarks values(5,'Science',70,'quarterly');
+insert into StuMarks values(5,'Social Science',82,'quarterly');
 
