@@ -115,3 +115,12 @@ create TRIGGER tr_StuMarks ON StudentMarks1
       
     END
    GO
+
+//Table Valued Function
+
+Create function [dbo].[StudentAnnualMarks] (@StudentId int)
+Returns TABLE as
+return
+select Studentinfo.Name,StuMarks.SubjectName,sum(StuMarks.Mark)/2 as AnualMark FROM StuMarks INNER JOIN  Studentinfo   on  Studentinfo.StudentId = StuMarks.StudentId where StuMarks.StudentId=@StudentId group by Studentinfo.Name,StuMarks.SubjectName;
+
+
