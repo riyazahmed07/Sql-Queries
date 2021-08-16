@@ -123,4 +123,14 @@ Returns TABLE as
 return
 select Studentinfo.Name,StuMarks.SubjectName,sum(StuMarks.Mark)/2 as AnualMark FROM StuMarks INNER JOIN  Studentinfo   on  Studentinfo.StudentId = StuMarks.StudentId where StuMarks.StudentId=@StudentId group by Studentinfo.Name,StuMarks.SubjectName;
 
+//call Function input studentid
 
+SELECT * FROM studentannualmarks(4);
+
+Name    Subject       AnnualMarks
+---------------------------------
+Ramu	English	             85
+Ramu	Maths	             71
+Ramu	Science	             69
+Ramu	Social Science	     85
+Ramu	Tamil	             71
