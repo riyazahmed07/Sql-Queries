@@ -152,3 +152,22 @@ SELECT * FROM StudentAnnualMarks1(4);
 Name    Tamil  English Maths  Science  Social
 ---------------------------------------------
 Ramu	71	85	71	69	85
+
+//Function To Find Annual Marks With Total And Grade
+
+Create function [dbo].[StudentAnnualMarks1] (@StudentId int)
+Returns TABLE as
+RETURN 
+(
+	-- Add the SELECT statement with parameter references here
+	select Studentinfo.Name,sum(case when StuMarks.SubjectName='Tamil' then StuMarks.Mark else 0 end)/2 as Tamil,
+	sum(case when StuMarks.SubjectName='English' then StuMarks.Mark else 0 end)/2 as English,
+	sum(case when StuMarks.SubjectName='Maths' then StuMarks.Mark else 0 end)/2 as Maths,
+	sum(case when StuMarks.SubjectName='Science' then StuMarks.Mark else 0 end)/2 as Science,
+	sum(case when StuMarks.SubjectName='Social Science' then StuMarks.Mark else 0 end)/2 as Social,
+	sum(StuMarks.Mark)/2 as Total,dbo.studentgrade(sum(StuMarks.Mark)/2,sum(case when StuMarks.Mark>40 then 1 else 0 end)) as Grade
+	  FROM StuMarks INNER JOIN  Studentinfo   on  Studentinfo.StudentId = StuMarks.StudentId
+	   where StuMarks.StudentId=@StudentId group by Studentinfo.Name
+)
+
+GO
