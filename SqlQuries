@@ -134,3 +134,21 @@ Ramu	Maths	             71
 Ramu	Science	             69
 Ramu	Social Science	     85
 Ramu	Tamil	             71
+
+//function to calculate anual marks
+
+Create function [dbo].[StudentAnnualMarks1] (@StudentId int)
+Returns TABLE as
+RETURN 
+(
+	-- Add the SELECT statement with parameter references here
+	select Studentinfo.Name,sum(case when StuMarks.SubjectName='Tamil' then StuMarks.Mark else 0 end)/2 as Tamil,sum(case when StuMarks.SubjectName='English' then StuMarks.Mark else 0 end)/2 as English,sum(case when StuMarks.SubjectName='Maths' then StuMarks.Mark else 0 end)/2 as Maths,sum(case when StuMarks.SubjectName='Science' then StuMarks.Mark else 0 end)/2 as Science,sum(case when StuMarks.SubjectName='Social Science' then StuMarks.Mark else 0 end)/2 as Social FROM StuMarks INNER JOIN  Studentinfo   on  Studentinfo.StudentId = StuMarks.StudentId where StuMarks.StudentId=@studentid group by Studentinfo.Name
+)
+GO
+
+//Annual Mark of the student
+
+SELECT * FROM StudentAnnualMarks1(4);
+Name    Tamil  English Maths  Science  Social
+---------------------------------------------
+Ramu	71	85	71	69	85
